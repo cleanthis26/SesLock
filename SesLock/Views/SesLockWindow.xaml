@@ -1,0 +1,36 @@
+﻿<Window x:Class="SesLock.SesLockWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:c="clr-namespace:SesLock.Converters"
+        xmlns:prop="clr-namespace:SesLock.Properties"
+        Title="SesLock" Height="350" Width="525">
+
+    <Window.Resources>
+        <c:BoolToVisibilityConverter x:Key="boolToVisibilityConv" />
+    </Window.Resources>
+
+    <Window.Visibility>
+        <Binding Path="IsWindowActive" Converter="{StaticResource boolToVisibilityConv}"/>
+    </Window.Visibility>
+
+    <Grid>
+        <tb:TaskbarIcon
+            Name="SesLockTB"
+            MenuActivation="LeftOrRightClick"
+            ToolTipText="{x:Static prop:Resources.AppName}"
+            DoubleClickCommand="{Binding DoubleClickCommand}"
+            Visibility="{Binding Path=IsNotifyIconActive, Converter={StaticResource boolToVisibilityConv}}"
+            IconSource="/SesLock;component/Resources/LockIcon.ico">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Name="LockMenuItem" Header="Lock" Command="{Binding LockCommand}"/>
+                    <MenuItem Name="SwitchUserMenuItem" Header="Switch User" Command="{Binding SwitchUserCommand}"/>
+                    <Separator />
+                    <MenuItem Name="StartupMenuItem" IsChecked="{Binding IsStartupApp}" Header="Start Automatically" Command="{Binding StartUpCommand}"/>
+                    <MenuItem Name="ExitMenuItem" Header="Exit" Command="{Binding ExitCommand}"/>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+    </Grid>
+</Window>
